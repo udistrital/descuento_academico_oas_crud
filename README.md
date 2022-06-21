@@ -11,6 +11,7 @@ Integración con
  - `descuento_academico_crud master/develop`
 
 
+
 ### Variables de Entorno
 ```shell
 DESCUENTO_ACADEMICO_CRUD_PGDB=[nombre de la base de datos]
