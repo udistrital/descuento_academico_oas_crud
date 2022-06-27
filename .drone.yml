@@ -154,8 +154,6 @@ steps:
     event:
     - push
 
-
-
 - name: publish_to_ecr_master
   image: plugins/ecr
   settings:
