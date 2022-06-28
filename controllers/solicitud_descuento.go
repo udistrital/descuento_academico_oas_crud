@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -93,6 +94,8 @@ func (c *SolicitudDescuentoController) GetAll() {
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
+
+	fmt.Println("Ingreso controlador")
 
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
