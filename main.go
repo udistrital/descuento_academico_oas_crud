@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/plugins/cors"
@@ -45,4 +47,5 @@ func main() {
 	auditoria.InitMiddleware()
 	beego.ErrorController(&customerror.CustomErrorController{})
 	beego.Run()
+	fmt.Println("Print Inicial")
 }
