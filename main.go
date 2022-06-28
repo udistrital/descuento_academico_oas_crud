@@ -42,7 +42,7 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-
+	fmt.Println("Print Inicial")
 	apistatus.Init()
 	auditoria.InitMiddleware()
 	beego.ErrorController(&customerror.CustomErrorController{})
