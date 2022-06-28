@@ -8,7 +8,7 @@ import (
 	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/lib/pq"
 	"github.com/udistrital/auditoria"
-	_ "github.com/udistrital/descuento_academico_crud/routers"
+	_ "github.com/udistrital/descuento_academico_oas_crud/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
 	"github.com/udistrital/utils_oas/customerror"
 )

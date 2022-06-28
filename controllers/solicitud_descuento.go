@@ -8,7 +8,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/descuento_academico_crud/models"
+	"github.com/udistrital/descuento_academico_oas_crud/models"
 )
 
 // SolicitudDescuentoController operations for SolicitudDescuento
