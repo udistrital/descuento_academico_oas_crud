@@ -8,7 +8,7 @@ Integración con
  - `CI`
  - `AWS Lambda - S3`
  - `Drone 1.x`
- - `descuento_academico_crud master/develop`
+ - `descuento_academico_oas_crud master/develop`
 
 
 ### Variables de Entorno
