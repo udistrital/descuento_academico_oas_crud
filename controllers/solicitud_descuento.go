@@ -61,6 +61,7 @@ func (c *SolicitudDescuentoController) Post() {
 // @Failure 404 not found resource
 // @router /:id [get]
 func (c *SolicitudDescuentoController) GetOne() {
+	fmt.Println("Ingreso controlador")
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetSolicitudDescuentoById(id)
@@ -88,14 +89,13 @@ func (c *SolicitudDescuentoController) GetOne() {
 // @Failure 404 not found resource
 // @router / [get]
 func (c *SolicitudDescuentoController) GetAll() {
+	fmt.Println("Ingreso controlador")
 	var fields []string
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
-
-	fmt.Println("Ingreso controlador")
 
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
