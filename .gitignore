@@ -1,3 +1,5 @@
+go.mod
+go.sum
 lastupdate.tmp
 .vscode/
 descuento_academico_oas_crud
