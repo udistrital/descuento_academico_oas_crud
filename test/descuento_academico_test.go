@@ -17,9 +17,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/DATA-DOG/godog"
-	"github.com/DATA-DOG/godog/colors"
 	"github.com/astaxie/beego"
+	"github.com/cucumber/godog"
+	"github.com/cucumber/godog/colors"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -32,14 +32,14 @@ var resDuplex string
 // @resDelete JSON repuesta Delete
 var resDelete string
 
-//@resBody JSON de respuesta a las solicitudesde la api
+// @resBody JSON de respuesta a las solicitudesde la api
 var resBody []byte
 
 var savepostres map[string]interface{}
 
 var Id float64
 
-//@Parametrica estructura de las tablas parametricas
+// @Parametrica estructura de las tablas parametricas
 type Parametrica struct {
 	Nombre            string
 	Descripcion       string
@@ -50,29 +50,33 @@ type Parametrica struct {
 	FechaModificacion time.Time
 }
 
-//@opt opciones de godog
+// @opt opciones de godog
 var opt = godog.Options{Output: colors.Colored(os.Stdout)}
 
-//@especificacion estructura de la fecha
+// @especificacion estructura de la fecha
 const especificacion = "Jan 2, 2006 at 3:04pm (MST)"
 
-//@TestMain para realizar la ejecucion con el comando go test ./test
+// @TestMain para realizar la ejecucion con el comando go test ./test
 func TestMain(m *testing.M) {
-	status := godog.RunWithOptions("godogs", func(s *godog.Suite) {
-		FeatureContext(s)
-	}, godog.Options{
+	opts := &godog.Options{
 		Format: "progress",
 		Paths:  []string{"features"},
-		//Randomize: time.Now().UTC().UnixNano(), // randomize scenario execution order
-	})
+	}
+
+	status := godog.TestSuite{
+		Name:                "godogs",
+		ScenarioInitializer: FeatureContext,
+		Options:             opts,
+	}.Run()
 
 	if st := m.Run(); st > status {
 		status = st
 	}
+
 	os.Exit(status)
 }
 
-//@init inicia la aplicacion para realizar los test
+// @init inicia la aplicacion para realizar los test
 func init() {
 	gen_files()
 	run_bee()
@@ -80,7 +84,7 @@ func init() {
 	godog.BindFlags("godog.", flag.CommandLine, &opt)
 }
 
-//@gen_files genera los archivos de ejemplos
+// @gen_files genera los archivos de ejemplos
 func gen_files() {
 	t := time.Now()
 
@@ -98,7 +102,7 @@ func gen_files() {
 	ioutil.WriteFile("./files/req/Yt1.json", rankingsJson, 0644)
 }
 
-//@run_bee activa el servicio de la api para realizar los test
+// @run_bee activa el servicio de la api para realizar los test
 func run_bee() {
 	parametros := "DESCUENTO_ACADEMICO_CRUD_HTTP_PORT=" + beego.AppConfig.String("httpport") +
 		" DESCUENTO_ACADEMICO_CRUD__PGUSER=" + beego.AppConfig.String("PGuser") +
@@ -127,15 +131,16 @@ func run_bee() {
 	wg.Done()
 }
 
-func deleteFile(path string) {
+func deleteFile(path string) error {
 	// delete file
 	err := os.Remove(path)
 	if err != nil {
-		fmt.Errorf("no se pudo eliminar el archivo")
+		return fmt.Errorf("no se pudo eliminar el archivo: %w", err)
 	}
+	return nil
 }
 
-//@exe_cmd ejecuta comandos en la terminal
+// @exe_cmd ejecuta comandos en la terminal
 func exe_cmd(cmd string, wg *sync.WaitGroup) {
 	//fmt.Println(cmd)
 	parts := strings.Fields(cmd)
@@ -148,7 +153,7 @@ func exe_cmd(cmd string, wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-//@AreEqualJSON comparar dos JSON si son iguales retorna true de lo contrario false
+// @AreEqualJSON comparar dos JSON si son iguales retorna true de lo contrario false
 func AreEqualJSON(s1, s2 string) (bool, error) {
 	var o1 interface{}
 	var o2 interface{}
@@ -166,7 +171,7 @@ func AreEqualJSON(s1, s2 string) (bool, error) {
 	return reflect.DeepEqual(o1, o2), nil
 }
 
-//@toJson convierte string en JSON
+// @toJson convierte string en JSON
 func toJson(p interface{}) string {
 	bytes, err := json.Marshal(p)
 	if err != nil {
@@ -177,7 +182,7 @@ func toJson(p interface{}) string {
 	return string(bytes)
 }
 
-//@getPages convierte en un tipo el json
+// @getPages convierte en un tipo el json
 func getPages(ruta string) []byte {
 	raw, err := ioutil.ReadFile(ruta)
 	if err != nil {
@@ -190,7 +195,7 @@ func getPages(ruta string) []byte {
 	return c
 }
 
-//@iSendRequestToWhereBodyIsJson realiza la solicitud a la API
+// @iSendRequestToWhereBodyIsJson realiza la solicitud a la API
 func iSendRequestToWhereBodyIsJson(method, endpoint, bodyreq string) error {
 	var url string
 
@@ -256,7 +261,7 @@ func iSendRequestToWhereBodyIsJson(method, endpoint, bodyreq string) error {
 	return nil
 }
 
-//@theResponseCodeShouldBe valida el codigo de respuesta
+// @theResponseCodeShouldBe valida el codigo de respuesta
 func theResponseCodeShouldBe(arg1 string) error {
 	if resStatus != arg1 {
 		return fmt.Errorf("se esperaba el codigo de respuesta .. %s .. y se obtuvo el codigo de respuesta .. %s .. ", arg1, resStatus)
@@ -264,7 +269,7 @@ func theResponseCodeShouldBe(arg1 string) error {
 	return nil
 }
 
-//@theResponseShouldMatchJson valida el JSON de respuesta
+// @theResponseShouldMatchJson valida el JSON de respuesta
 func theResponseShouldMatchJson(arg1 string) error {
 	div := strings.Split(arg1, "")
 
@@ -282,8 +287,6 @@ func theResponseShouldMatchJson(arg1 string) error {
 			return nil
 		} else {
 			return fmt.Errorf("Errores : %s", result.Errors())
-
-			return nil
 		}
 	}
 	if div[13] == "I" {
@@ -298,7 +301,7 @@ func theResponseShouldMatchJson(arg1 string) error {
 	return nil
 }
 
-func FeatureContext(s *godog.Suite) {
+func FeatureContext(s *godog.ScenarioContext) {
 	s.Step(`^I send "([^"]*)" request to "([^"]*)" where body is json "([^"]*)"$`, iSendRequestToWhereBodyIsJson)
 	s.Step(`^the response code should be "([^"]*)"$`, theResponseCodeShouldBe)
 	s.Step(`^the response should match json "([^"]*)"$`, theResponseShouldMatchJson)
